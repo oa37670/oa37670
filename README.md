@@ -1,19 +1,28 @@
-import pyotp
-import time
+def guess_number():
+    print("فكر في رقم بين 1 و 999999 وسأحاول تخمينه!")
+    print("أجب بـ (نعم / لا / صحيح) حسب السؤال.")
 
-# إنشاء مفتاح سري (يتم حفظه في قاعدة البيانات عادة)
-secret = pyotp.random_base32()
-print(f"المفتاح السري (احفظه): {secret}")
+    low = 1
+    high = 999999
+    attempts = 0
 
-# إنشاء كائن TOTP
-totp = pyotp.TOTP(secret)
+    while low <= high:
+        guess = (low + high) // 2
+        attempts += 1
 
-# طباعة رمز التحقق الحالي
-print("رمز التحقق الحالي:", totp.now())
+        print(f"هل الرقم أكبر من {guess}؟")
+        response = input("(نعم / لا / صحيح): ").strip().lower()
 
-# التحقق من رمز (يحاكي ما يفعله السيرفر)
-user_input = input("أدخل رمز التحقق: ")
-if totp.verify(user_input):
-    print("الرمز صحيح!")
-else:
-    print("رمز خاطئ.")
+        if response == "نعم":
+            low = guess + 1
+        elif response == "لا":
+            high = guess - 1
+        elif response == "صحيح":
+            print(f"تم التخمين! الرقم هو {guess}، بعد {attempts} محاولة.")
+            return
+        else:
+            print("الرجاء إدخال (نعم / لا / صحيح).")
+
+    print("لم أتمكن من تخمين الرقم. هل كنت صادقًا؟")
+
+guess_number()
